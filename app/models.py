@@ -1,6 +1,7 @@
 from pydantic import BaseModel, field_validator
 
 from app.constants import NOTIFICATION_TYPES
+from app.utils import email_address_is_valid
 
 
 class Notification(BaseModel):
@@ -9,8 +10,8 @@ class Notification(BaseModel):
 
     @field_validator("to")
     def to_must_be_valid_email(cls, value):
-        if not "@" in value:
-            raise ValueError("email is not is the correct format")
+        if not email_address_is_valid(value):
+            raise ValueError("email is not in the correct format")
         return value
 
     @field_validator("notification_type")
